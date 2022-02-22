@@ -1,0 +1,73 @@
+<?php
+
+use App\Models\{{class}};
+
+beforeEach(function (){
+
+});
+
+it('failed access create {{modelCamelCase}} page without login', function (){
+    $response = $this->get(route('{{modelCamelCase}}.create'));
+
+    $response->assertStatus(302);
+    $response->assertRedirect('login');
+});
+
+it('failed access create {{modelCamelCase}} page as an Admin', function () {
+    $response = actingAsAdmin()->get(route('{{modelCamelCase}}.create'));
+
+    $response->assertStatus(403);
+});
+
+it('failed create {{modelCamelCase}} as an Admin', function (){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsAdmin()->post(route('{{modelCamelCase}}.store'), array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute' => ${{modelCamelCase}}->yourReplacedAttribute*/
+    ]));
+    $this->assertDatabaseMissing('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('d-m-Y H:i:s')*/
+    ]));
+
+    $response->assertStatus(403);
+});
+
+it('can access create {{modelCamelCase}} page as a Super Admin', function () {
+    $response = actingAsSuperAdmin()->get(route('{{modelCamelCase}}.create'));
+
+    $response->assertStatus(200);
+});
+
+it('can create {{modelCamelCase}} as a Super Admin', function (){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsSuperAdmin()->post(route('{{modelCamelCase}}.store'), array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute' => ${{modelCamelCase}}->replacedAttribute*/
+    ]));
+    $response->assertStatus(302);
+    $response->assertSessionHasNoErrors();
+    $response->assertSessionHas(["success"]);
+
+    $this->assertDatabaseHas('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+    ]));
+});
+
+it('failed validation create {{modelCamelCase}} as Super Admin', function ($data, $errors){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsSuperAdmin()->post(route('{{modelCamelCase}}.store'), array_merge(${{modelCamelCase}}->toArray(), $data));
+    $response->assertStatus(302);
+    $response->assertSessionHasErrors($errors);
+
+    $this->assertDatabaseHas('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => ${{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+    ]));
+})->with([
+    [['yourAttribute1' => '', 'yourAttribute2' => '', 'yourAttribute3' => ''], ['yourAttribute1', 'yourAttribute2', 'yourAttribute3']],
+]);
+
+
+
+?>

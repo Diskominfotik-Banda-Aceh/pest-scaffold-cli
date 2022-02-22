@@ -1,0 +1,28 @@
+<?php
+
+use App\Models\{{class}};
+
+beforeEach(function (){
+
+});
+
+it('failed access index {{modelCamelCase}} page without login', function (){
+    $response = $this->get(route('{{modelCamelCase}}.index'));
+
+    $response->assertStatus(302);
+    $response->assertRedirect('login');
+});
+
+it('failed access index {{modelCamelCase}} page as an Admin', function () {
+    $response = actingAsAdmin()->get(route('{{modelCamelCase}}.index'));
+
+    $response->assertStatus(403);
+});
+
+it('can access index {{modelCamelCase}} page as a Super Admin', function () {
+    $response = actingAsSuperAdmin()->get(route('{{modelCamelCase}}.index'));
+
+    $response->assertStatus(200);
+});
+
+?>

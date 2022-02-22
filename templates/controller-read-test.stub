@@ -1,0 +1,34 @@
+<?php
+
+use App\Models\{{class}};
+
+beforeEach(function (){
+    $this->{{modelCamelCase}} = {{class}}::factory()->create();
+});
+
+it('failed access show {{modelCamelCase}} page without login', function (){
+    $response = $this->get(route('{{modelCamelCase}}.show', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(302);
+    $response->assertRedirect('login');
+});
+
+it('failed access show {{modelCamelCase}} page as an Admin', function () {
+    $response = actingAsAdmin()->get(route('{{modelCamelCase}}.show', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(403);
+});
+
+it('can access show {{modelCamelCase}} page as a Super Admin', function () {
+    $response = actingAsSuperAdmin()->get(route('{{modelCamelCase}}.show', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(200);
+});
+
+it('failed access show not found {{modelCamelCase}} page as an Admin', function () {
+    $response = actingAsAdmin()->get(route('{{modelCamelCase}}.show', $this->{{modelCamelCase}}->id+10));
+
+    $response->assertStatus(404);
+});
+
+?>

@@ -1,0 +1,104 @@
+<?php
+
+use App\Models\{{class}};
+
+beforeEach(function (){
+    $this->{{modelCamelCase}} = {{class}}::factory()->create();
+});
+
+it('failed access edit {{modelCamelCase}} page without login', function (){
+    $response = $this->get(route('{{modelCamelCase}}.edit', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(302);
+    $response->assertRedirect('login');
+});
+
+it('failed access edit {{modelCamelCase}} page as an Admin', function () {
+    $response = actingAsAdmin()->get(route('{{modelCamelCase}}.edit', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(403);
+});
+
+it('can access edit {{modelCamelCase}} page as a Super Admin', function () {
+    $response = actingAsSuperAdmin()->get(route('{{modelCamelCase}}.edit', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(200);
+});
+
+it('failed edit {{modelCamelCase}} as an admin', function (){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsAdmin()->put(route('{{modelCamelCase}}.update', $this->{{modelCamelCase}}->id), array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('d-m-Y H:i:s')*/
+    ]));
+    $response->assertStatus(403);
+
+    $this->assertDatabaseHas('databaseTableName', array_merge($this->{{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => $this->{{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => $this->{{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+        'updated_at' => $this->{{modelCamelCase}}->updated_at->format('Y-m-d H:i:s'),
+    ]));
+    $this->assertDatabaseMissing('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => ${{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+    ]));
+});
+
+it('can edit {{modelCamelCase}} as a Super Admin', function (){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsSuperAdmin()->put(route('{{modelCamelCase}}.update', $this->{{modelCamelCase}}->id), array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('d-m-Y H:i:s')*/
+    ]));
+    $response->assertStatus(302);
+    $response->assertSessionHas(["success"]);
+    $response->assertSessionHasNoErrors();
+
+    $this->assertDatabaseHas('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+    ]));
+    $this->assertDatabaseMissing('databaseTableName', array_merge($this->{{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => $this->{{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+    ]));
+});
+
+it('failed edit not found {{modelCamelCase}} as a Super Admin', function (){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsSuperAdmin()->put(route('{{modelCamelCase}}.update', $this->{{modelCamelCase}}->id+10), array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('d-m-Y H:i:s')*/
+    ]));
+    $response->assertStatus(404);
+
+    $this->assertDatabaseHas('databaseTableName', array_merge($this->{{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => $this->{{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => $this->{{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+        'updated_at' => $this->{{modelCamelCase}}->updated_at->format('Y-m-d H:i:s'),
+    ]));
+    $this->assertDatabaseMissing('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+    ]));
+});
+
+it('failed validation edit {{modelCamelCase}} as Super Admin', function ($data, $errors){
+    ${{modelCamelCase}} = {{class}}::factory()->make();
+
+    $response = actingAsSuperAdmin()->put(route('{{modelCamelCase}}.update', $this->{{modelCamelCase}}->id),
+        array_merge(${{modelCamelCase}}->toArray(), $data));
+    $response->assertStatus(302);
+    $response->assertSessionHasErrors($errors);
+
+    $this->assertDatabaseHas('databaseTableName', array_merge($this->{{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => $this->{{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => $this->{{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+    ]));
+    $this->assertDatabaseMissing('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s')*/
+    ]));
+})->with([
+    [['yourAttribute1' => '', 'yourAttribute2' => '', 'yourAttribute3' => ''], ['yourAttribute1', 'yourAttribute2', 'yourAttribute3']],
+    [['yourAttribute1' => faker()->realText(500)], ['yourAttribute1']],
+    [['yourAttribute2' => 'invalid'], ['yourAttribute2']],
+]);
+
+?>

@@ -1,0 +1,61 @@
+<?php
+
+use App\Models\{{class}};
+
+beforeEach(function (){
+    $this->{{modelCamelCase}} = {{class}}::factory()->create();
+});
+
+it('failed access delete {{modelCamelCase}} page without login', function (){
+    $response = $this->delete(route('{{modelCamelCase}}.destroy', $this->{{modelCamelCase}}->id));
+
+    $response->assertStatus(302);
+    $response->assertRedirect('login');
+});
+
+it('failed delete {{modelCamelCase}} as an Admin', function (){
+    $response = actingAsAdmin()->delete(route('{{modelCamelCase}}.destroy', $this->{{modelCamelCase}}->id));
+
+    $this->assertDatabaseHas('databaseTableName', array_merge($this->{{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => $this->{{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => $this->{{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+        'updated_at' => $this->{{modelCamelCase}}->updated_at->format('Y-m-d H:i:s'),
+    ]));
+
+    $response->assertStatus(403);
+});
+
+it('can delete {{modelCamelCase}} as a Super Admin', function (){
+    ${{modelCamelCase}} = $this->{{modelCamelCase}};
+
+    $response = actingAsSuperAdmin(function ($user) use (${{modelCamelCase}}){
+        ${{modelCamelCase}}->user()->sync($user->id);
+    })->delete(route('{{modelCamelCase}}.destroy', ${{modelCamelCase}}->id));
+
+    $response->assertStatus(302);
+    $response->assertSessionHas(["success"]);
+    $response->assertSessionHasNoErrors();
+
+    $this->assertDatabaseMissing('databaseTableName', array_merge(${{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => ${{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => ${{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+        'updated_at' => ${{modelCamelCase}}->updated_at->format('Y-m-d H:i:s'),
+    ]));
+});
+
+it('failed delete not found {{modelCamelCase}} as a Super Admin', function (){
+    ${{modelCamelCase}} = $this->{{modelCamelCase}};
+
+    $response = actingAsSuperAdmin(function ($user) use (${{modelCamelCase}}){
+        ${{modelCamelCase}}->user()->sync($user->id);
+    })->delete(route('{{modelCamelCase}}.destroy', $this->{{modelCamelCase}}->id+10));
+    $response->assertStatus(404);
+
+    $this->assertDatabaseHas('databaseTableName', array_merge($this->{{modelCamelCase}}->toArray(), [
+        /*'yourAttribute1' => $this->{{modelCamelCase}}->date->format('Y-m-d H:i:s'),*/
+        'created_at' => $this->{{modelCamelCase}}->created_at->format('Y-m-d H:i:s'),
+        'updated_at' => $this->{{modelCamelCase}}->updated_at->format('Y-m-d H:i:s'),
+    ]));
+});
+
+?>
