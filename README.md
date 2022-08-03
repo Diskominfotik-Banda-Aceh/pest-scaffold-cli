@@ -1,3 +1,18 @@
+Table of contents
+=================
+<!--ts-->
+   * [Table of contents](#table-of-contents)
+   * [Pest PHP Scaffold CLI](#pest-php-scaffold-cli)
+      * [Installation](#installation)
+          * [Pass a custom path](#pass-a-custom-path)
+      * [Usage](#usage)
+      * [Changelog](#changelog)
+      * [Contributing](#contributing)
+      * [Security](#security)
+      * [About](#about)
+      * [License](#license)
+<!--te-->
+
 Pest PHP Scaffold CLI
 ===
 
@@ -17,7 +32,7 @@ Usage
 You can then create a new repository by calling the following command:
 
 ```bash
-$ php artisan make:pest ModelName"
+$ php artisan make:pest ModelName
 ```
 
 This command will create a directory named `ModelNameController` in tests/Feature/Http/Controller and will create a basic setup for create, read, update, delete test controller.
