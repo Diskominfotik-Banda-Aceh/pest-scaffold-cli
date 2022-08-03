@@ -23,7 +23,7 @@ Installation
 Install this command as a global composer package
 
 ```bash
-$ composer global require diskominfotik-banda-aceh/pest-scaffold-cli
+$ composer require diskominfotik-banda-aceh/pest-scaffold-cli
 ```
 Copy this provider to the `config/app.php`
 ```bash
