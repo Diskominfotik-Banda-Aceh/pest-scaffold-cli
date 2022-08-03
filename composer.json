@@ -1,22 +1,21 @@
 {
     "name": "diskominfotik-banda-aceh/pest-scaffold-cli",
     "description": "Console commands to generate a directory structure for scaffold pest PHP testing files",
-    "type": "library",
     "autoload": {
         "psr-4": {
             "DiskominfotikBandaAceh\\PestScaffoldCli\\": "src/"
         }
     },
-    "license": "MIT",
     "authors": [
         {
             "name": "Diskominfotik Banda Aceh",
             "email": "diskominfotikbna@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
-        "php": "^7.0",
-        "symfony/console": "^4.0"
+
+    },
+    "require-dev": {
+        "pestphp/pest": "^v1.21.3"
     }
 }

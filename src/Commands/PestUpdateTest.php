@@ -1,19 +1,20 @@
 <?php
 
-namespace DiskominfotikBandaAceh\PestScaffoldCli;
+namespace DiskominfotikBandaAceh\PestScaffoldCli\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use function base_path;
 
-class PestDeleteTest extends GeneratorCommand
+class PestUpdateTest extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:pest-delete
+    protected $signature = 'make:pest-update
                             {name : Model name to generate}
                             {--path=} : Path for files (default in tests"\Feature\Http\Controller")
                             ';
@@ -23,14 +24,14 @@ class PestDeleteTest extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create of pest test scaffold for delete test';
+    protected $description = 'Create of pest test scaffold for update test';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Delete Test';
+    protected $type = 'Update Test';
 
     /**
      * Execute the console command.
@@ -84,7 +85,7 @@ class PestDeleteTest extends GeneratorCommand
     }
 
     protected function getStub(){
-        return $this->resolveStubPath('/stubs/controller-delete-test.stub');
+        return $this->resolveStubPath('/../../templates/controller-update-test.stub');
     }
 
     /**
@@ -109,7 +110,7 @@ class PestDeleteTest extends GeneratorCommand
     protected function getPath($name)
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
-        $filename = $name.'DeleteTest';
+        $filename = $name.'UpdateTest';
         return base_path('tests').str_replace('\\', '/', $filename).'.php';
     }
 
