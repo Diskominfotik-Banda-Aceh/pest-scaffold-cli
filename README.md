@@ -20,7 +20,7 @@ This project delivers a simple set of Console Commands to generate a directory s
 
 Installation
 ---
-Install this command as a global composer package
+Install this command as a composer package
 
 ```bash
 composer require diskominfotik-banda-aceh/pest-scaffold-cli
