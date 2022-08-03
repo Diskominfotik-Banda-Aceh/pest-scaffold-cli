@@ -23,7 +23,7 @@ Installation
 Install this command as a global composer package
 
 ```bash
-$ composer require diskominfotik-banda-aceh/pest-scaffold-cli
+composer require diskominfotik-banda-aceh/pest-scaffold-cli
 ```
 Copy this provider to the `config/app.php`
 ```bash
@@ -36,7 +36,7 @@ Usage
 You can then create a new repository by calling the following command:
 
 ```bash
-$ php artisan make:pest ModelName
+php artisan make:pest ModelName
 ```
 
 This command will create a directory named `ModelNameController` in tests/Feature/Http/Controller and will create a basic setup for create, read, update, delete test controller.
@@ -63,7 +63,7 @@ All the files and classes will have set the correct names and namespaces, but re
 You can also pass an second argument specifying the path where the tests should be generated.
 
 ```bash
-$ php artisan make:pest ModelName --path="\Feature\Http\Controller"
+php artisan make:pest ModelName --path="\Feature\Http\Controller"
 ```
 
 Above example would generate the scaffold test at `./tests/Feature/Http/Controller/ModelNameController`. This can be handy if you want to use this generator within an existing Laravel project.
@@ -73,7 +73,7 @@ Above example would generate the scaffold test at `./tests/Feature/Http/Controll
 By default you will get all of the test scaffold but you can add `c` or `r` or `u` or `d` for specific file. 
 
 ```bash
-$ php artisan make:pest ModelName --crud=c,r,u,d
+php artisan make:pest ModelName --crud=c,r,u,d
 ```
 
 Changelog
